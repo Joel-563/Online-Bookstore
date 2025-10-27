@@ -1,0 +1,38 @@
+version: "3.9"
+services:
+  frontend:
+    build: ./Frontend-React
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+  backend:
+    build: ./Backend-flask
+    depends_on:
+      - db
+      - broker
+    ports:
+      - "5000:5000"
+
+  worker:
+    build: ./Worker
+    depends_on:
+      - backend
+      - broker
+
+  broker:
+    image: redis:7-alpine
+  
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: bookstore
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql

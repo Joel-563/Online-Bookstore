@@ -1,0 +1,12 @@
+FROM node:20-alpine AS base
+WORKDIR /app
+COPY package.json /app/
+COPY package-lock.json /app/
+RUN npm ci
+COPY . /app/
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=base /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx","-g","daemon off;"]

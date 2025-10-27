@@ -1,0 +1,9 @@
+echo "Frontend-React/node_modules/
+__pycache__/
+*.pyc
+venv/
+.env
+db-data/
+Frontend-React/build/
+*.log
+.DS_Store"
